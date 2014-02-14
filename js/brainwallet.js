@@ -12,6 +12,24 @@
     var PRIVATE_KEY_VERSION = 0x80;
     var ADDRESS_URL_PREFIX = 'http://blockchain.info'
 
+    var trxServer = {
+	    MMC: [''],
+	    BTC:['http://blockchain.info/unspent?address=']
+	    };
+    var trxServerType2 = {
+	    MMC: [''],
+	    BTC:['http://blockexplorer.com/q/mytransactions/']
+	    };
+    var pushServer = {
+	    MMC: [''],
+	    BTC:['http://blockchain.info/pushtx']
+	    };
+    var fees = {
+	    MMC: ['0.05'],
+	    BTC:['0.0001']
+	    };  
+		
+    
     function parseBase58Check(address) {
         var bytes = Bitcoin.Base58.decode(address);
         var end = bytes.length - 4;
@@ -233,7 +251,8 @@
         var addr = new Bitcoin.Address(hash160);
         addr.version = PUBLIC_KEY_VERSION;
         $('#addr').val(addr);
-
+        $('#txAddr').val(addr);
+	    
         var payload = hash;
 
         if (compressed)
@@ -242,7 +261,8 @@
         var sec = new Bitcoin.Address(payload);
         sec.version = PRIVATE_KEY_VERSION;
         $('#sec').val(sec);
-
+        $('#txSec').val(sec);
+	
         var pub = Crypto.util.bytesToHex(getEncoded(gen_pt, compressed));
         $('#pub').val(pub);
 
@@ -275,7 +295,9 @@
     }
 
     function onChangePass() {
-        calc_hash();
+	    	$('#balancegroup').hide();
+	$('#send').hide();
+	calc_hash();
         clearTimeout(timeout);
         timeout = setTimeout(generate, TIMEOUT);
     }
@@ -343,7 +365,7 @@
     function genRandomPass() {
         // chosen by fair dice roll
         // guaranted to be random
-        $('#pass').val('correct horse battery staple');
+        $('#pass').val('');
         $('#from_pass').button('toggle');
         $('#pass').focus();
         gen_from = 'pass';
@@ -907,9 +929,9 @@
         var fval = Bitcoin.Util.formatValue(value);
         var fee = parseFloat($('#txFee').val());
         $('#txBalance').val(fval);
-        var value = Math.floor((fval-fee)*1e8)/1e8;
-        $('#txValue').val(value);
-        txRebuild();
+        //var value = Math.floor((fval-fee)*1e8)/1e8;
+        //$('#txValue').val(value);
+        //txRebuild();
     }
 
     function txUpdateUnspent() {
@@ -923,25 +945,28 @@
 
     function txParseUnspent(text) {
         if (text == '') {
-            alert('No data');
+            //alert('No balance loaded for this address. You will not be able to send funds, because there are no funds at this address.');
+	    $('#txBalance').val(0);
+            $('#txValue').val(0);
             return;
         }
         txSetUnspent(text);
     }
 
     function txGetUnspent() {
+	    txLogin();
+	    /*
         var addr = $('#txAddr').val();
-
-        var url = (txType == 'txBCI') ? 'http://blockchain.info/unspent?address=' + addr :
-            'http://blockexplorer.com/q/mytransactions/' + addr;
+	    
+        var url = (txType == 'txBCI') ? trxServer[$('#crName').text()][0] + addr : trxServerType2[$('#crName').text()][0] + addr;
 
         url = prompt('Press OK to download transaction history:', url);
-        if (url != null && url != "") {
+	if (url != null && url != "") {
             $('#txUnspent').val('');
             tx_fetch(url, txParseUnspent);
         } else {
           txSetUnspent($('#txUnspent').val());
-        }
+        }*/
     }
 
     function txOnChangeJSON() {
@@ -982,13 +1007,16 @@
         dest.val('');
         value.val('');
         $('#txRemoveDest').attr('disabled', false);
+	$('#txRemoveDest').show();
         return false;
     }
 
     function txOnRemoveDest() {
         var list = $(document).find('.txCC');
-        if (list.size() == 2)
+        if (list.size() == 2){
             $('#txRemoveDest').attr('disabled', true);
+	    $('#txRemoveDest').hide();
+	}
         list.last().remove();
         return false;
     }
@@ -1073,6 +1101,8 @@
         }
     }
 
+
+    
     function txSign() {
         if (txFrom=='txFromSec')
         {
@@ -1102,7 +1132,7 @@
 
         if (fval + fee > balance) {
             fee = balance - fval;
-            $('#txFee').val(fee > 0 ? fee : '0.00');
+            //$('#txFee').val(fee > 0 ? fee : '0.00');
         }
 
         clearTimeout(timeout);
@@ -1158,14 +1188,14 @@
             fval += o[i].fval;
         }
 
-        if (fval + fee > balance) {
+        /*if (fval + fee > balance) {
             fval = balance - fee;
             $('#txValue').val(fval < 0 ? 0 : fval);
         }
 
         if (fee == 0 && fval == balance - 0.0001) {
             $('#txValue').val(balance);
-        }
+        }*/
 
         clearTimeout(timeout);
         timeout = setTimeout(txRebuild, TIMEOUT);
@@ -1407,11 +1437,74 @@
       $('#crName').text(name);
 
       $('#crSelect').dropdown('toggle');
+
+      $('#txBalanceLabel').text(name);
+      $('#txValueLabel').text(name);
+      $('#txFeeLabel').text(name);
       gen_update();
       translate();
+      returnToLogin();
       return false;
     }
 
+    function returnToLogin(){
+	$('#tab-generator').hide();
+    	$('#txRemoveDest').hide();
+	$('#balancegroup').hide();
+	$('#send').hide();	
+	$('#txLogin').text("Load Balance"+" ("+$('#crName').text()+")");
+	$('#txFee').val(fees[$('#crName').text()][0]);	
+	$('#sec').val('');
+	$('#pass').val('');
+	}
+    
+	function changeToPrivateKey(){
+		$('#passphraselabel').hide();
+		$('#pass').hide();
+		$('#privatekeylabel').show();
+		$('#sec').show();
+		$('#sec').attr('readonly', false);
+		$('#sec').val('');
+		returnToLogin();
+	}
+	
+	function changeToPassphrase(){
+		$('#passphraselabel').show();
+		$('#pass').show();
+		$('#pass').attr('readonly', false);
+		$('#pass').val('');
+		
+		$('#privatekeylabel').hide();
+		$('#sec').hide();
+		returnToLogin();
+	}
+	
+	function txLogin() {
+	    $('#txBalance').val(0);
+	    $('#balancegroup').show();
+               var addr = $('#txAddr').val();
+
+    	$('#balancegroup').show();
+	$('#send').show();
+
+        //var url = (txType == 'txBCI') ? 'http://blockchain.info/unspent?address=' + addr :
+        //    'http://blockexplorer.com/q/mytransactions/' + addr;
+
+	    var url = (txType == 'txBCI') ? trxServer[$('#crName').text()][0] + addr : trxServerType2[$('#crName').text()][0] + addr;
+	    
+
+	    
+        url = prompt('Press OK to download transaction history:', url);
+        if (url != null && url != "") {
+            $('#txUnspent').val('');
+            tx_fetch(url, txParseUnspent);
+        } else {
+          txSetUnspent($('#txUnspent').val());
+        }
+	
+	$('#tab-generator').show();
+    }
+	
     $(document).ready( function() {
 
         if (window.location.hash)
@@ -1451,9 +1544,13 @@
 
         $('#txSec').val(tx_sec);
         $('#txAddr').val(tx_addr);
-        $('#txDest').val(tx_dest);
+        //$('#txDest').val(tx_dest);
+	
+	changeToPassphrase();
+	
+	
 
-        txSetUnspent(tx_unspent);
+        //txSetUnspent(tx_unspent);
 
         $('#txGetUnspent').click(txGetUnspent);
         $('#txType label input').on('change', txChangeType);
@@ -1472,7 +1569,8 @@
         $('#txRemoveDest').click(txOnRemoveDest);
         $('#txSend').click(txSend);
         $('#txSign').click(txSign);
-
+        $('#txLogin').click(txLogin);
+	
         // converter
 
         onInput('#src', onChangeFrom);
@@ -1539,5 +1637,8 @@
 
         $('#crCurrency ul li a').on('click', crChange);
 
+	$('#usePrivateKey').on('click', changeToPrivateKey);
+	$('#usePassphrase').on('click', changeToPassphrase);
+	
     });
 })(jQuery);

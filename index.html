@@ -26,18 +26,14 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <button class="navbar-toggle" data-target=".bs-navbar-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span></button> <a class="navbar-brand" href="/">Brainwallet</a>
+          <button class="navbar-toggle" data-target=".bs-navbar-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span> <span class="icon-bar">&nbsp;</span></button> <a class="navbar-brand" href="/">Memory Wallet</a>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active">
-              <a data-toggle="tab" href="#generator">Generator</a></li>
-            <li><a data-toggle="tab" href="#chains" id="tab-chains">Chains</a></li>
-            <li><a data-toggle="tab" href="#tx" id="tab-tx">Transactions</a></li>
-            <li><a data-toggle="tab" href="#converter" id="tab-converter">Converter</a></li>
-            <li><a data-toggle="tab" href="#sign" id="tab-sign">Sign</a></li>
-            <li><a data-toggle="tab" href="#verify" id="tab-verify">Verify</a></li>
-          </ul>
+              <a data-toggle="tab" href="#tx" id="tab-tx">Wallet</a></li>
+            <li><a data-toggle="tab" href="#generator" id="tab-generator" style="display:none">Technical</a></li>
+	</ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown" id="crCurrency">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="crSelect"><span id="crName">BTC</span>&nbsp;<b class="caret">&nbsp;</b></a>
@@ -70,29 +66,42 @@
       </div>
     </header>
     <div class="container">
-      <div class="tab-content">
-        <!-- Generator -->
-        <div class="tab-pane fade in active" id="generator">
+      <div class="tab-content"><!-- Transactions -->
+        <div class="tab-pane fade in active" id="tx">
           <form action="/" class="form-horizontal" method="get">
             <fieldset>
-              <legend>Generator</legend>
-              <div class="form-group">
+              <legend>Wallet</legend>
+	      <div class="form-group" style="display:none">
                 <label class="col-lg-2 control-label" for="from_pass">Get Address From</label>
                 <div class="col-lg-10 controls">
                   <div class="btn-group" data-toggle="buttons" id="gen_from">
-                    <label class="btn btn-default active" title="Single SHA256"><input id="from_pass" name="gen_from" type="radio" />Passphrase</label> <label class="btn btn-default" title="Hex-encoded"><input id="from_hash" name="gen_from" type="radio" />Secret Exponent</label> <label class="btn btn-default" title="Base58-encoded"><input id="from_sec" name="gen_from" type="radio" />Private Key</label>
+                    <label class="btn btn-default active" title="Single SHA256"><input id="from_pass" name="gen_from" type="radio" />Passphrase</label><label class="btn btn-default" title="Base58-encoded"><input id="from_sec" name="gen_from" type="radio" />Private Key</label>
                   </div>
                 </div>
               </div>
-              <div class="form-group">
-                <label class="col-lg-2 control-label" for="pass">Passphrase</label>
+	<div class="form-group">
+	 <label class="col-lg-2 control-label" for="pass"  id="passphraselabel">Secret Passphrase<br/>(or <a id="usePrivateKey">use private key</a>)</label>
+	 <label class="col-lg-2 control-label" for="sec"  id="privatekeylabel">Private Key<br/>(or <a id="usePassphrase">use passphrase</a>)</label>
+	 <div class="col-lg-10 controls">
+	  <div class="row">
+	   <div class="col-xs-8">
+	    <div class="input-append">
+	     <input class="form-control" id="pass" title="Use entire original sentence that does not appear in any song or literature, not a 8-10 char password" type="text" />
+	     <input class="form-control" id="sec" title="Wallet Import Format (Base58Check of Secret Exponent)" type="text" />
+	    </div>
+	   </div>
+	   <div class="col-xs-3">
+	    <button class="btn btn-default" id="txLogin" type="button">Load Balance</button>
+	   </div>
+	  </div>
+	 </div>
+           </div>
+	        <div class="form-group" id="privatekeygroup">
                 <div class="col-lg-10 controls">
-                  <div class="input-append">
-                    <input class="form-control" id="pass" title="Use entire original sentence that does not appear in any song or literature, not a 8-10 char password" type="text" />
-                  </div>
+                  
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="hash">Secret Exponent</label>
                 <div class="col-lg-10 controls">
                   <div class="input-group">
@@ -103,7 +112,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label">Point Conversion</label>
                 <div class="col-lg-10 controls">
                   <div class="btn-group" data-toggle="buttons" id="gen_comp">
@@ -111,18 +120,115 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
-                <label class="col-lg-2 control-label" for="sec">Private Key</label>
+              <div class="form-group"  style="display:none">
+                <label class="col-lg-2 control-label" for="txFrom">Build Transaction From</label>
                 <div class="col-lg-10 controls">
-                  <input class="form-control" id="sec" readonly="readonly" title="Wallet Import Format (Base58Check of Secret Exponent)" type="text" />
+                  <div class="btn-group" data-toggle="buttons" id="txFrom">
+                    <label class="btn btn-default active"><input id="txFromSec" name="txFrom" type="radio" />Private Key</label> <label class="btn btn-default"><input id="txFromJSON" name="txFrom" type="radio" />JSON Transaction</label> <label class="btn btn-default"><input id="txFromRaw" name="txFrom" type="radio" />Raw Transaction</label>
+                  </div>
                 </div>
               </div>
+              
+	    <div class="form-group" id="balancegroup">
+                <label class="col-lg-2 control-label" for="txAddr">Public Address</label>
+                <div class="col-lg-10 controls">
+                  <div class="row">
+                    <div class="col-xs-8">
+                      <input class="form-control" id="txAddr" type="text" />
+                    </div>
+                    <div class="col-xs-3">
+                      <span class="input-group"><span class="input-group-addon" id="txBalanceLabel">BTC</span> <input class="form-control" id="txBalance" placeholder="0.00" readonly="readonly" type="text" /></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+	     <div id="send">
+              <legend>Send</legend>
+	      
+              <div class="collapse" id="txUnspentForm">
+                <div class="form-group">
+                  <label class="col-lg-2 control-label" for="txBBE">Use History From</label>
+                  <div class="col-lg-10 controls">
+                    <div class="btn-group" data-toggle="buttons" id="txType">
+                      <label class="btn btn-default active"><input id="txBCI" name="txType" type="radio" />BlockChain Info</label> <label class="btn btn-default"><input id="txBBE" name="txType" type="radio" />Bitcoin Block Explorer</label>
+                    </div>&nbsp;<button class="btn btn-default help-inline" id="txGetUnspent" type="button">Download</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-2 control-label" for="txUnspent">Transaction History</label>
+                  <div class="col-lg-10 controls">
+                    <textarea class="form-control" id="txUnspent" rows="16"></textarea>
+                  </div>
+                </div>
+              </div>
+	    <div class="form-group txCC" id="destinationgroup">
+                <label class="col-lg-2 control-label" for="txDest">Destination Address</label>
+                <div class="col-lg-10 controls">
+                  <div class="row">
+                    <div class="col-xs-8">
+                      <input autocomplete="off" class="form-control txDest" id="txDest" type="text" />
+                    </div>
+                    <div class="col-xs-2">
+                      <span class="input-group"><span class="input-group-addon" id="txValueLabel">BTC</span> <input class="form-control" id="txValue" placeholder="0.00" type="text" /></span>
+                    </div>
+                    <div class="col-xs-2 help-inline">
+                      <button class="btn btn-default" id="txAddDest" type="button">+</button>&nbsp;<button class="btn btn-default" id="txRemoveDest" type="button">–</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group"   >
+                <label class="col-lg-2 control-label" for="txJSON">JSON Transaction</label>
+                <div class="col-lg-10 controls">
+                  <textarea class="form-control" id="txJSON" readonly="readonly" rows="12" spellcheck="false"></textarea>
+                </div>
+              </div>
+              <div class="form-group"  >
+                <label class="col-lg-2 control-label" for="txHex">Raw Transaction</label>
+                <div class="col-lg-10 controls">
+                  <textarea class="form-control" id="txHex" readonly="readonly" rows="5"></textarea>
+                </div>
+              </div>
+              <div class="form-group" id="feegroup"  >
+                <label class="col-lg-2 control-label" for="txFee">Fee</label>
+                <div class="col-lg-10 controls">
+                  <div class="input-group">
+                    <span class="input-group-addon" id="txFeeLabel">BTC</span> <input class="form-control" id="txFee" type="text" value="0.0001" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-group"  id="buttongroup">
+                <div class="col-lg-offset-2 col-lg-10 controls">
+                  <div class="input-group">
+                    <button class="btn btn-default" id="txSign" style="display:none" title="Signatures require a random number which means signing the same data twice results in different sigs" type="button">Re-sign</button> &nbsp;<button class="btn btn-default" id="txSend" type="button">Send Transaction</button>
+                  </div>
+                </div>
+              </div>
+	      </div>
+            </fieldset>
+          </form>
+        </div>
+        <!-- Generator -->
+        <div class="tab-pane fade in" id="generator">
+          <form action="/" class="form-horizontal" method="get">
+            <fieldset>
+              <legend>Technical</legend>
+  
               <div class="form-group">
                 <label class="col-lg-2 control-label" for="addr">Address</label>
                 <div class="col-lg-10 controls">
                   <input class="form-control" id="addr" readonly="readonly" title="Bitcoin Address (Base58Check of HASH160)" type="text" />
                 </div>
               </div>
+              
+	      <div class="form-group">
+                <label class="col-lg-2 control-label" for="txSec">Private Key</label>
+                <div class="col-lg-10 controls">
+                  <input class="form-control" id="txSec" readonly="readonly" type="text" />
+                </div>
+              </div>
+              
+ 
               <div class="form-group">
                 <label class="col-lg-2 control-label" for="genAddrQR">Address QR Code</label>
                 <div class="col-lg-10 controls">
@@ -209,102 +315,6 @@
                 <label class="col-lg-2 control-label" for="chList">Chain</label>
                 <div class="col-lg-10 controls">
                   <textarea class="form-control" id="chList" readonly="readonly" rows="13"></textarea>
-                </div>
-              </div>
-            </fieldset>
-          </form>
-        </div><!-- Transactions -->
-        <div class="tab-pane fade" id="tx">
-          <form action="/" class="form-horizontal" method="get">
-            <fieldset>
-              <legend>Transactions</legend>
-              <div class="form-group">
-                <label class="col-lg-2 control-label" for="txFrom">Build Transaction From</label>
-                <div class="col-lg-10 controls">
-                  <div class="btn-group" data-toggle="buttons" id="txFrom">
-                    <label class="btn btn-default active"><input id="txFromSec" name="txFrom" type="radio" />Private Key</label> <label class="btn btn-default"><input id="txFromJSON" name="txFrom" type="radio" />JSON Transaction</label> <label class="btn btn-default"><input id="txFromRaw" name="txFrom" type="radio" />Raw Transaction</label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-lg-2 control-label" for="txSec">Private Key</label>
-                <div class="col-lg-10 controls">
-                  <input class="form-control" id="txSec" type="text" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-lg-2 control-label" for="txAddr">Source Address</label>
-                <div class="col-lg-10 controls">
-                  <div class="row">
-                    <div class="col-xs-6">
-                      <input class="form-control" id="txAddr" type="text" />
-                    </div>
-                    <div class="col-xs-3">
-                      <span class="input-group"><span class="input-group-addon">BTC</span> <input class="form-control" id="txBalance" placeholder="0.00" readonly="readonly" type="text" /></span>
-                    </div>
-                    <div class="col-xs-2">
-                      <button class="btn btn-default" data-target="#txUnspentForm" data-toggle="collapse" id="txToggle" type="button">Edit History</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="collapse" id="txUnspentForm">
-                <div class="form-group">
-                  <label class="col-lg-2 control-label" for="txBBE">Use History From</label>
-                  <div class="col-lg-10 controls">
-                    <div class="btn-group" data-toggle="buttons" id="txType">
-                      <label class="btn btn-default active"><input id="txBCI" name="txType" type="radio" />BlockChain Info</label> <label class="btn btn-default"><input id="txBBE" name="txType" type="radio" />Bitcoin Block Explorer</label>
-                    </div>&nbsp;<button class="btn btn-default help-inline" id="txGetUnspent" type="button">Download</button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-lg-2 control-label" for="txUnspent">Transaction History</label>
-                  <div class="col-lg-10 controls">
-                    <textarea class="form-control" id="txUnspent" rows="16"></textarea>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group txCC">
-                <label class="col-lg-2 control-label" for="txDest">Destination Address</label>
-                <div class="col-lg-10 controls">
-                  <div class="row">
-                    <div class="col-xs-6">
-                      <input autocomplete="off" class="form-control txDest" id="txDest" type="text" />
-                    </div>
-                    <div class="col-xs-3">
-                      <span class="input-group"><span class="input-group-addon">BTC</span> <input class="form-control" id="txValue" placeholder="0.00" type="text" /></span>
-                    </div>
-                    <div class="col-xs-3 help-inline">
-                      <button class="btn btn-default" id="txAddDest" type="button">+</button>&nbsp;<button class="btn btn-default" disabled="disabled" id="txRemoveDest" type="button">–</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-lg-2 control-label" for="txJSON">JSON Transaction</label>
-                <div class="col-lg-10 controls">
-                  <textarea class="form-control" id="txJSON" readonly="readonly" rows="12" spellcheck="false"></textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-lg-2 control-label" for="txHex">Raw Transaction</label>
-                <div class="col-lg-10 controls">
-                  <textarea class="form-control" id="txHex" readonly="readonly" rows="5"></textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-lg-2 control-label" for="txFee">Fee</label>
-                <div class="col-lg-10 controls">
-                  <div class="input-group">
-                    <span class="input-group-addon">BTC</span> <input class="form-control" id="txFee" type="text" value="0.0001" />
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-lg-offset-2 col-lg-10 controls">
-                  <div class="input-group">
-                    <button class="btn btn-default" id="txSign" title="Signatures require a random number which means signing the same data twice results in different sigs" type="button">Re-sign</button> &nbsp;<button class="btn btn-default" id="txSend" type="button">Send Transaction</button>
-                  </div>
                 </div>
               </div>
             </fieldset>
