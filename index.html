@@ -2,11 +2,11 @@
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Brainwallet - JavaScript Client-Side Bitcoin Address Generator</title>
-    <meta content="Client-side Bitcoin address and deterministic wallets generator, Base58 converter, transaction builder, signing and verifying messages with Bitcoin address" name="description" />
+    <title>MemoryWallet - HTML5 Wallet</title>
+    <meta content="MemoryWallet - Send Bitcoin or Memorycoin with just a Memory Wallet or Private Key" name="description" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="bitcoin address generator" name="description" />
-    <meta content="brainwallet" name="author" />
+    <meta content="html5 crypto wallet" name="description" />
+    <meta content="memorycoin" name="author" />
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/brainwallet.css" rel="stylesheet" />
     <link href="favicon.ico" rel="shortcut icon" />
@@ -32,35 +32,19 @@
           <ul class="nav navbar-nav">
             <li class="active">
               <a data-toggle="tab" href="#tx" id="tab-tx">Wallet</a></li>
-            <li><a data-toggle="tab" href="#generator" id="tab-generator" style="display:none">Technical</a></li>
+            <li><a data-toggle="tab" href="#generator" id="tab-generator" style="display:none">Public</a></li>
+	    <li><a data-toggle="tab" href="#chains" id="tab-chains" style="display:none">Private</a></li>
+	<li><a  style="opacity:0.3;" data-toggle="tab" href="#converter" id="tab-converter" style="display:none">Debug</a></li>
+            <li><a data-toggle="tab" href="#sign" id="tab-sign" style="display:none">Sign</a></li>
+            <li><a data-toggle="tab" href="#verify" id="tab-verify" style="display:none">Verify</a></li>
 	</ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown" id="crCurrency">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="crSelect"><span id="crName">BTC</span>&nbsp;<b class="caret">&nbsp;</b></a>
-              <ul class="dropdown-menu dropdown-menu-two-column">
+              <ul class="dropdown-menu">
                 <li><a data-target="0x00" href="http://blockchain.info"><span class="pull-right">BTC</span>Bitcoin</a></li>
-                <li><a data-target="0x0B" href="http://explorer.cryptogenicbullion.org:2750"><span class="pull-right">CGB</span>Cryptogenic</a></li>
-                <li><a data-target="0x1E" href="http://www.chainbrowser.com/datacoin"><span class="pull-right">DTC</span>Datacoin</a></li>
-                <li><a data-target="0x00" href="http://d.evco.in/abe"><span class="pull-right">DVC</span>Devcoin</a></li>
-                <li><a data-target="0x1E" href="http://dgc.cryptocoinexplorer.com"><span class="pull-right">DGC</span>Digitalcoin</a></li>
-                <li><a data-target="0x1E" href="http://dogechain.info"><span class="pull-right">DOGE</span>Dogecoin</a></li>
-                <li><a data-target="0x0E" href="http://ftc.cryptocoinexplorer.com"><span class="pull-right">FTC</span>Feathercoin</a></li>
-                <li><a data-target="0x66" href="http://exploretheblocks.com:2750"><span class="pull-right">IFC</span>Infinitecoin</a></li>
-                <li><a data-target="0x8A" href="http://d.evco.in/abe"><span class="pull-right">IXC</span>Ixcoin</a></li>
-                <li><a data-target="0x30" href="http://explorer.litecoin.net"><span class="pull-right">LTC</span>Litecoin</a></li>
                 <li><a data-target="0x32" href="http://www.chainbrowser.com/memorycoin"><span class="pull-right">MMC</span>Memorycoin</a></li>
-                <li><a data-target="0x34" href="http://explorer.dot-bit.org"><span class="pull-right">NMC</span>Namecoin</a></li>
-                <li><a data-target="0x08" href="http://nvc.cryptocoinexplorer.com"><span class="pull-right">NVC</span>Novacoin</a></li>
-                <li><a data-target="0x37" href="http://ppc.cryptocoinexplorer.com"><span class="pull-right">PPC</span>Peercoin</a></li>
-                <li><a data-target="0x17" href="http://primecoin.org"><span class="pull-right">XPM</span>Primecoin</a></li>
-                <li><a data-target="0x38" href="http://btsblock.com"><span class="pull-right">PTS</span>Protoshares</a></li>
-                <li><a data-target="0x3A" href="http://quarkexplorer.com"><span class="pull-right">QRK</span>Quarkcoin</a></li>
-                <li><a data-target="0x00" href="http://trc.cryptocoinexplorer.com"><span class="pull-right">TRC</span>Terracoin</a></li>
-                <li><a data-target="0x6F" href="http://blockexplorer.com/testnet"><span class="pull-right">TEST</span>Testnet</a></li>
-                <li><a data-target="0x47" href="http://explorer.vertcoin.org"><span class="pull-right">VTC</span>Vertcoin</a></li>
-                <li><a data-target="0x49" href="http://wdc.cryptocoinexplorer.com"><span class="pull-right">WDC</span>Worldcoin</a></li>
-                <li><a data-target="0x50" href="http://bit.usr.sh:2750"><span class="pull-right">ZET</span>Zetacoin</a></li>
-              </ul></li>
+                </ul></li>
           </ul>
         </nav>
       </div>
@@ -80,8 +64,8 @@
                 </div>
               </div>
 	<div class="form-group">
-	 <label class="col-lg-2 control-label" for="pass"  id="passphraselabel">Secret Passphrase<br/>(or <a id="usePrivateKey">use private key</a>)</label>
-	 <label class="col-lg-2 control-label" for="sec"  id="privatekeylabel">Private Key<br/>(or <a id="usePassphrase">use passphrase</a>)</label>
+	 <label class="col-lg-2 control-label" for="pass"  id="passphraselabel">Secret Passphrase | <a style="opacity:0.1;" id="usePrivateKey">Private Key</a></label>
+	 <label class="col-lg-2 control-label" for="sec"  id="privatekeylabel"><a style="opacity:0.1;" id="usePassphrase">Secret Passphrase</a> | Private Key</label>
 	 <div class="col-lg-10 controls">
 	  <div class="row">
 	   <div class="col-xs-7">
@@ -129,7 +113,7 @@
                 <div class="col-lg-10 controls">
                   <div class="row">
                     <div class="col-xs-7">
-                      <input class="form-control" id="txAddr" type="text" />
+                      <input class="form-control" id="txAddr" type="text"  readonly="readonly"/>
                     </div>
                     <div class="col-xs-3">
                       <span class="input-group"><span class="input-group-addon" id="txBalanceLabel">BTC</span> <input class="form-control" id="txBalance" placeholder="0.00" readonly="readonly" type="text" /></span>
@@ -172,18 +156,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group" style="display:none">
-                <label class="col-lg-2 control-label" for="txJSON">JSON Transaction</label>
-                <div class="col-lg-10 controls">
-                  <textarea class="form-control" id="txJSON" readonly="readonly" rows="12" spellcheck="false"></textarea>
-                </div>
-              </div>
-              <div class="form-group" style="display:none">
-                <label class="col-lg-2 control-label" for="txHex">Raw Transaction</label>
-                <div class="col-lg-10 controls">
-                  <textarea class="form-control" id="txHex" readonly="readonly" rows="5"></textarea>
-                </div>
-              </div>
+              
               <div class="form-group" id="feegroup"  >
 	      <label class="col-lg-2 control-label" for="txFee">Fee</label>
                 <div class="col-lg-10 controls">
@@ -221,7 +194,7 @@
         <div class="tab-pane fade in" id="generator">
           <form action="/" class="form-horizontal" method="get">
             <fieldset>
-              <legend>Technical</legend>
+              <legend>Public</legend>
   
               <div class="form-group">
                 <label class="col-lg-2 control-label" for="addr">Address</label>
@@ -229,25 +202,10 @@
                   <input class="form-control" id="addr" readonly="readonly" title="Bitcoin Address (Base58Check of HASH160)" type="text" />
                 </div>
               </div>
-              
-	      <div class="form-group">
-                <label class="col-lg-2 control-label" for="txSec">Private Key</label>
-                <div class="col-lg-10 controls">
-                  <input class="form-control" id="txSec" readonly="readonly" type="text" />
-                </div>
-              </div>
-              
- 
               <div class="form-group">
                 <label class="col-lg-2 control-label" for="genAddrQR">Address QR Code</label>
                 <div class="col-lg-10 controls">
                   <a href="#" id="genAddrURL" target="_blank" title="Click to view address history (external link)"><span id="genAddrQR"></span></a>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-lg-2 control-label" for="der">Private Key (DER)</label>
-                <div class="col-lg-10 controls">
-                  <textarea class="form-control" id="der" readonly="readonly" rows="5" title="ASN.1 DER-encoded ECDSA private key (OpenSSL)"></textarea>
                 </div>
               </div>
               <div class="form-group">
@@ -268,8 +226,22 @@
         <div class="tab-pane fade" id="chains">
           <form action="/" class="form-horizontal" method="get">
             <fieldset>
-              <legend>Chains</legend>
-              <div class="form-group">
+              <legend>Private</legend>
+	      	      <div class="form-group">
+                <label class="col-lg-2 control-label" for="txSec">Private Key</label>
+                <div class="col-lg-10 controls">
+                  <input class="form-control" id="txSec" readonly="readonly" type="text" />
+                </div>
+              </div>
+
+<div class="form-group">
+                <label class="col-lg-2 control-label" for="der">Private Key (DER)</label>
+                <div class="col-lg-10 controls">
+                  <textarea class="form-control" id="der" readonly="readonly" rows="5" title="ASN.1 DER-encoded ECDSA private key (OpenSSL)"></textarea>
+                </div>
+              </div>
+
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="chType">Generation Method</label>
                 <div class="col-lg-10 controls">
                   <div class="btn-group" data-toggle="buttons" id="chType">
@@ -277,7 +249,7 @@
                   </div>&nbsp;&nbsp;<span class="help-inline" id="chMsg">&nbsp;</span>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="chRoot">Root Key</label>
                 <div class="col-lg-10 controls">
                   <div class="input-group">
@@ -288,31 +260,31 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="chCode">Chain Code</label>
                 <div class="col-lg-10 controls">
                   <input class="form-control" id="chCode" maxlength="64" readonly="readonly" type="text" />
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="chBackup">Paper Backup</label>
                 <div class="col-lg-10 controls">
                   <textarea class="form-control" id="chBackup" rows="4" spellcheck="false"></textarea>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="chRange">Primary Addresses</label>
                 <div class="col-lg-10 controls">
                   <input class="form-control" id="chRange" maxlength="3" type="text" value="5" />
                 </div>
               </div>
-              <div class="form-group" title="Electrum specific, added to the end of the list">
+              <div class="form-group" title="Electrum specific, added to the end of the list"  style="display:none">
                 <label class="col-lg-2 control-label" for="chChange">Change Addresses</label>
                 <div class="col-lg-10 controls">
                   <input class="form-control" disabled="disabled" id="chChange" maxlength="3" type="text" value="1" />
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="chFormat">Wallet Format</label>
                 <div class="col-lg-10 controls">
                   <div class="btn-group" data-toggle="buttons" id="chFormat">
@@ -320,7 +292,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="chList">Chain</label>
                 <div class="col-lg-10 controls">
                   <textarea class="form-control" id="chList" readonly="readonly" rows="13"></textarea>
@@ -332,8 +304,20 @@
         <div class="tab-pane fade" id="converter">
           <form action="/" class="form-horizontal" method="get">
             <fieldset>
-              <legend>Converter</legend>
+              <legend>Debug</legend>
+	      <div class="form-group">
+                <label class="col-lg-2 control-label" for="txJSON">JSON Transaction</label>
+                <div class="col-lg-10 controls">
+                  <textarea class="form-control" id="txJSON" readonly="readonly" rows="12" spellcheck="false"></textarea>
+                </div>
+              </div>
               <div class="form-group">
+                <label class="col-lg-2 control-label" for="txHex">Raw Transaction</label>
+                <div class="col-lg-10 controls">
+                  <textarea class="form-control" id="txHex" readonly="readonly" rows="5"></textarea>
+                </div>
+              </div>
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="enc_from">Source Encoding</label>
                 <div class="col-lg-10 controls">
                   <div class="btn-group" data-toggle="buttons" id="enc_from">
@@ -341,7 +325,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="enc_from">Source Text</label>
                 <div class="col-lg-10 controls">
                   <textarea class="form-control" id="src" rows="8" spellcheck="false"></textarea>
@@ -350,7 +334,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="enc_from">Convert To</label>
                 <div class="col-lg-10 controls">
                   <div class="btn-group" data-toggle="buttons" id="enc_to">
@@ -358,7 +342,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group"  style="display:none">
                 <label class="col-lg-2 control-label" for="enc_from">Result</label>
                 <div class="col-lg-10 controls">
                   <textarea class="form-control" id="dest" readonly="readonly" rows="8"></textarea>
@@ -447,7 +431,7 @@
         <hr />
         <footer>
           <p>
-            <span class="pull-right">Based on <a href="http://brainwallet.org">Brainwallet</a> &nbsp;  Powered by <a href="http://pages.github.com">GitHub Pages</a> &nbsp; <a href="https://github.com/memorycoin/memorycoin.github.io">GitHub Repository</a> &nbsp; <a href="https://github.com/memorycoin/memorycoin.github.io/archive/master.zip">Download ZIP</a></span>
+            <span class="pull-right">Sponsored by <a href="http://brainwallet.org">MemoryCoin</a> &nbsp;  Based on <a href="http://brainwallet.org">Brainwallet</a> &nbsp;  Powered by <a href="http://pages.github.com">GitHub Pages</a> &nbsp; <a href="https://github.com/memorycoin/memorycoin.github.io">GitHub Repository</a> &nbsp; <a href="https://github.com/memorycoin/memorycoin.github.io/archive/master.zip">Download ZIP</a></span>
           </p>
         </footer>
       </div>

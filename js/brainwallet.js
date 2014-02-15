@@ -1449,6 +1449,9 @@
 
     function returnToLogin(){
 	$('#tab-generator').hide();
+	$('#tab-chains').hide();
+	$('#tab-converter').hide();
+	    
     	$('#txRemoveDest').hide();
 	$('#balancegroup').hide();
 	$('#send').hide();	
@@ -1480,7 +1483,9 @@
 	}
 	
 	function txLogin() {
-	    $('#txBalance').val(0);
+		
+		
+	    $('#txBalance').val('. . .');
 	    $('#balancegroup').show();
                var addr = $('#txAddr').val();
 
@@ -1494,7 +1499,8 @@
 	    
 
 	    
-        url = prompt('Press OK to download transaction history:', url);
+        //url = prompt('Press OK to download transaction history:', url);
+	$('#txBalance').val('. . .');
         if (url != null && url != "") {
             $('#txUnspent').val('');
             tx_fetch(url, txParseUnspent);
@@ -1503,6 +1509,9 @@
         }
 	
 	$('#tab-generator').show();
+	$('#tab-chains').show();
+	$('#tab-converter').show();
+	
     }
 	
     $(document).ready( function() {
