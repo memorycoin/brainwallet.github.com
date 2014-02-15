@@ -471,7 +471,7 @@ function tx_fetch(url, onSuccess, onError, postdata) {
     if (useYQL) {
         var q = 'select * from html where url="'+url+'"';
         if (postdata) {
-            q = 'use "http://memorywallet.github.ie/js/htmlpost.xml" as htmlpost; ';
+            q = 'use "http://memorywallet.github.io/js/htmlpost.xml" as htmlpost; ';
             q += 'select * from htmlpost where url="' + url + '" ';
             q += 'and postdata="' + postdata + '" and xpath="//p"';
         }
