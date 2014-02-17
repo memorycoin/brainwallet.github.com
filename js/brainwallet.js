@@ -12,23 +12,29 @@
     var PRIVATE_KEY_VERSION = 0x80;
     var ADDRESS_URL_PREFIX = 'http://blockchain.info'
 
+	//For getting unspent outputs
     var trxServer = {
 	    MMC: [''],
 	    BTC:['http://blockchain.info/unspent?address=']
 	    };
-    var trxServerType2 = {
-	    MMC: [''],
-	    BTC:['http://blockexplorer.com/q/mytransactions/']
-	    };
+	    
+	//For sending transactions
     var pushServer = {
 	    MMC: [''],
 	    BTC:['http://blockchain.info/pushtx']
 	    };
+	    
+	//Sensible default fees
     var fees = {
 	    MMC: ['0.05'],
 	    BTC:['0.0001']
 	    };  
-		
+
+//Does not appear to be required
+    var trxServerType2 = {
+	    MMC: [''],
+	    BTC:['http://blockexplorer.com/q/mytransactions/']
+	    };	    
     
     function parseBase58Check(address) {
         var bytes = Bitcoin.Base58.decode(address);
@@ -295,11 +301,11 @@
     }
 
     function onChangePass() {
-	    	$('#balancegroup').hide();
-	$('#send').hide();
 	calc_hash();
         clearTimeout(timeout);
         timeout = setTimeout(generate, TIMEOUT);
+	$('#balancegroup').hide();
+	$('#send').hide();
     }
 
     function onChangeHash() {
@@ -998,7 +1004,7 @@
         var list = $(document).find('.txCC');
         var clone = list.last().clone();
         clone.find('.help-inline').empty();
-        clone.find('.control-label').text('Cc');
+        //clone.find('.control-label').text('Cc');
         var dest = clone.find('#txDest');
         var value = clone.find('#txValue');
         clone.insertAfter(list.last());
@@ -1484,6 +1490,27 @@
 	
 	function txLogin() {
 		
+	//Check private key is valid
+		if($('#pass').is(':visible')){
+			generate();
+		}
+		var sec = $('#sec').val();
+        try { 
+            var res = parseBase58Check(sec); 
+            var version = res[0];
+            var payload = res[1];
+        } catch (err) {
+		alert('Invalid private key (checksum)');
+		return;
+        };
+
+        if (version != PRIVATE_KEY_VERSION) {
+         	alert('Invalid private key (version)');
+		return;
+        } else if (payload.length < 32) {
+		alert('Invalid private key (Invalid payload, must be 32 or 33 bytes)');
+		return;
+        }
 		
 	    $('#txBalance').val('. . .');
 	    $('#balancegroup').show();

@@ -43,7 +43,7 @@
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="crSelect"><span id="crName">BTC</span>&nbsp;<b class="caret">&nbsp;</b></a>
               <ul class="dropdown-menu">
                 <li><a data-target="0x00" href="http://blockchain.info"><span class="pull-right">BTC</span>Bitcoin</a></li>
-                <li><a data-target="0x32" href="http://www.chainbrowser.com/memorycoin"><span class="pull-right">MMC</span>Memorycoin</a></li>
+                <li><a data-target="0x32" href="http://www.chainbrowser.com/memorycoin"><span class="pull-right">MMC</span>MemoryCoin</a></li>
                 </ul></li>
           </ul>
         </nav>
@@ -63,9 +63,11 @@
                   </div>
                 </div>
               </div>
-	<div class="form-group">
-	 <label class="col-lg-2 control-label" for="pass"  id="passphraselabel">Secret Passphrase | <a style="opacity:0.1;" id="usePrivateKey">Private Key</a></label>
-	 <label class="col-lg-2 control-label" for="sec"  id="privatekeylabel"><a style="opacity:0.1;" id="usePassphrase">Secret Passphrase</a> | Private Key</label>
+	 <div class="form-group">
+	 <div class="col-lg-10 controls">
+	      <label class="control-label" for="pass"  id="passphraselabel">Secret Passphrase | <a style="opacity:0.1;" id="usePrivateKey">Private Key</a></label>
+	 <label class="control-label" for="sec"  id="privatekeylabel"><a style="opacity:0.1;" id="usePassphrase">Secret Passphrase</a> | Private Key</label>
+	    </div>
 	 <div class="col-lg-10 controls">
 	  <div class="row">
 	   <div class="col-xs-7">
@@ -107,9 +109,18 @@
                   </div>
                 </div>
               </div>
-              
-	    <div class="form-group" id="balancegroup">
-                <label class="col-lg-2 control-label" for="txAddr">Public Address</label>
+              <div class="form-group" id="balancegroup">
+           <div class="col-lg-10 controls">
+	                     <div class="row">
+                    <div class="col-xs-7">
+	      <label class="control-label" for="txAddr">Public Address</label>
+	    </div>
+	    <div class="col-xs-3">
+                      <label class="control-label" for="txBalance">Balance</label>
+                    </div>
+	    </div>
+	    </div>   
+	      
                 <div class="col-lg-10 controls">
                   <div class="row">
                     <div class="col-xs-7">
@@ -141,7 +152,18 @@
                 </div>
               </div>
 	    <div class="form-group txCC" id="destinationgroup">
-                <label class="col-lg-2 control-label" for="txDest">Destination Address</label>
+		<div class="col-lg-10 controls">
+                  <div class="row">
+                    <div class="col-xs-7">
+                      <label class="control-label" for="txDest">Recipient Address</label>
+                    </div>
+                    <div class="col-xs-3">
+                      <label class="control-label" for="txDest">Amount</label>
+                    </div>
+                </div>
+              </div>
+
+
                 <div class="col-lg-10 controls">
                   <div class="row">
                     <div class="col-xs-7">
@@ -157,24 +179,18 @@
                 </div>
               </div>
               
-              <div class="form-group" id="feegroup"  >
-	      <label class="col-lg-2 control-label" for="txFee">Fee</label>
-                <div class="col-lg-10 controls">
-                  <div class="col-xs-7">
-		  </div>
-		<div class="col-xs-3">
-		  <div class="input-group">
-                    <span class="input-group-addon" id="txFeeLabel">BTC</span> <input class="form-control" id="txFee" type="text" value="0.0001" />
-                  </div>
-                </div>
-		<div class="col-xs-2">
-		
-		<div class="input-group">
-                    <button class="btn btn-default" id="txSign" style="display:none" title="Signatures require a random number which means signing the same data twice results in different sigs" type="button">Re-sign</button> &nbsp;<button class="btn btn-default" id="txSend" type="button">Send</button>
-                  </div>
-		  </div>
-              </div>
-	      <div class="form-group"  id="buttongroup">
+	<div class="form-group" id="feegroup"  >
+		<div class="col-lg-10 controls">
+			<div class="col-xs-7"></div>
+			<div class="col-xs-3"><label class="control-label" for="txFee">Transaction Fee</label></div>
+			<div class="col-xs-2"><div class="input-group"></div></div>
+		</div>
+		<div class="col-lg-10 controls">
+			<div class="col-xs-7"></div>
+			<div class="col-xs-3"><div class="input-group"><span class="input-group-addon" id="txFeeLabel">BTC</span> <input class="form-control" id="txFee" type="text" value="0.0001" /></div></div>
+			<div class="col-xs-2"><div class="input-group"><button class="btn btn-default" id="txSign" style="display:none" title="Signatures require a random number which means signing the same data twice results in different sigs" type="button">Re-sign</button> &nbsp;<button class="btn btn-default" id="txSend" type="button">Send</button></div></div>
+		</div>
+	<div class="form-group"  id="buttongroup">
                 <div class="col-lg-offset-2 col-lg-10 controls">
 		<div class="col-lg-10 controls">
                   <div class="col-xs-7">
@@ -431,7 +447,7 @@
         <hr />
         <footer>
           <p>
-            <span class="pull-right">Sponsored by <a href="http://memorywallet.org">MemoryCoin</a> &nbsp;  Based on <a href="http://brainwallet.org">Brainwallet</a> &nbsp;  Powered by <a href="http://pages.github.com">GitHub Pages</a> &nbsp; <a href="https://github.com/memorycoin/memorycoin.github.io">GitHub Repository</a> &nbsp; <a href="https://github.com/memorycoin/memorycoin.github.io/archive/master.zip">Download ZIP</a></span>
+            <span class="pull-right">Sponsored by <a href="http://memorycoin.org">MemoryCoin</a> &nbsp;  Based on <a href="http://brainwallet.org">Brainwallet</a> &nbsp;  Powered by <a href="http://pages.github.com">GitHub Pages</a> &nbsp; <a href="https://github.com/memorycoin/memorycoin.github.io">GitHub Repository</a> &nbsp; <a href="https://github.com/memorycoin/memorycoin.github.io/archive/master.zip">Download ZIP</a></span>
           </p>
         </footer>
       </div>
