@@ -14,13 +14,13 @@
 
 	//For getting unspent outputs
     var trxServer = {
-	    MMC: [''],
+	    MMC: ['http://memorycoin.biz:3300/unspent?address='],
 	    BTC:['http://blockchain.info/unspent?address=']
 	    };
 	    
 	//For sending transactions
     var pushServer = {
-	    MMC: [''],
+	    MMC: ['http://memorycoin.biz:3300/pushtx'],
 	    BTC:['http://blockchain.info/pushtx']
 	    };
 	    
