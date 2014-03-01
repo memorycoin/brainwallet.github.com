@@ -1033,7 +1033,7 @@
 
     function txSend() {
         var txAddr = $('#txAddr').val();
-        var address = TX.getAddress();
+        var address = TX.getAddress(PUBLIC_KEY_VERSION);
 
         var r = '';
         if (txAddr != address)
@@ -1042,7 +1042,8 @@
         var tx = $('#txHex').val();
 
         //url = 'http://bitsend.rowit.co.uk/?transaction=' + tx;
-        url = 'http://blockchain.info/pushtx';
+        //url = 'http://blockchain.info/pushtx';
+        url = pushServer[$('#crName').text()][0];
         postdata = 'tx=' + tx;
         url = prompt(r + 'Press OK to send transaction to:', url);
         if (url != null && url != "") {
