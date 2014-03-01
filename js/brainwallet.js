@@ -1103,8 +1103,8 @@
             $('#txJSON').val(txJSON);
             $('#txHex').val(txHex);
         } catch(err) {
-            $('#txJSON').val('');
-            $('#txHex').val('');
+            $('#txJSON').val(''+err);
+            $('#txHex').val(''+err);
         }
     }
 
