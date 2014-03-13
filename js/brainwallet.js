@@ -16,23 +16,27 @@
     var trxServer = {
 	    MMC: ['http://mmcexplorer.info/unspent?data='],
 	    BTC:['http://blockchain.info/unspent?address=']
+	    PTS:['http://memorycoin.biz:3300/unspent?data=']
 	    };
 	    
 	//For sending transactions
     var pushServer = {
 	    MMC: ['http://mmcexplorer.info/pushtx'],
 	    BTC:['http://blockchain.info/pushtx']
+	    PTS:['http://memorycoin.biz:3300/pushtx']
 	    };
 	    
 	//Sensible default fees
     var fees = {
 	    MMC: ['0.05'],
 	    BTC:['0.0001']
+	    PTS:['0.001']
 	    };  
 
 //Does not appear to be required
     var trxServerType2 = {
 	    MMC: [''],
+	    PTS: [''],
 	    BTC:['http://blockexplorer.com/q/mytransactions/']
 	    };	    
     
